@@ -1,6 +1,6 @@
 import './styles/App.css';
 import {Button, Form} from "react-bootstrap";
-import {use, useState} from "react";
+import {useEffect, useState} from "react";
 
 function App() {
 	const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -8,13 +8,13 @@ function App() {
 	const [email, setEmail] = useState('');
 	const [costumes, setCostumes] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [usedEmails, setUsedEmails] = useState([]);
 
-	const usedEmails = fetch(backendUrl + '/emails')
-		.then(response => response.json())
-		.then(data => {
-			console.log("Fetched emails:", data);
-			return data;
-		});
+	useEffect(() => {
+		fetch(backendUrl + '/emails')
+				.then(response => response.json())
+				.then(data => setUsedEmails(data))
+	}, []);
 
 	const handleChangeState = (event) => {
 		const value = event.target.value;
@@ -40,7 +40,7 @@ function App() {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		setLoading(true);
-		if ((await usedEmails).includes(email)) {
+		if (usedEmails.includes(email)) {
 			alert("Gdzie sie kurwa pchasz drugi raz, jak zjebals to pisz do alka to ci pomoze");
 			setLoading(false);
 			return;
