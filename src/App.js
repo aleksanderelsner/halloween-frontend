@@ -1,12 +1,20 @@
 import './styles/App.css';
 import {Button, Form} from "react-bootstrap";
-import {useState} from "react";
+import {use, useState} from "react";
 
 function App() {
 	const backendUrl = process.env.REACT_APP_BACKEND_URL;
 	const [inputValue, setInputValue] = useState('');
 	const [email, setEmail] = useState('');
 	const [costumes, setCostumes] = useState([]);
+	const [loading, setLoading] = useState(false);
+
+	const usedEmails = fetch(backendUrl + '/emails')
+		.then(response => response.json())
+		.then(data => {
+			console.log("Fetched emails:", data);
+			return data;
+		});
 
 	const handleChangeState = (event) => {
 		const value = event.target.value;
@@ -31,6 +39,12 @@ function App() {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		setLoading(true);
+		if ((await usedEmails).includes(email)) {
+			alert("Gdzie sie kurwa pchasz drugi raz, jak zjebals to pisz do alka to ci pomoze");
+			setLoading(false);
+			return;
+		}
 		console.log("calling api");
 		const resp = await fetch(backendUrl + '/costumes', {
 			method: 'POST',
@@ -43,6 +57,8 @@ function App() {
 		setInputValue('');
 		setCostumes([]);
 		setEmail('');
+		setLoading(false);
+		alert("Dzięki za zgłoszenie" + email + ", wyslalos " + costumes.join(", "));
 	}
 
   return (
@@ -51,15 +67,17 @@ function App() {
 			<Form.Group className="mb-3" controlId="formBasicEmail">
 				<Form.Label column="lg">Email</Form.Label>
 				<Form.Control
+						disabled={loading}
 						type="email"
 						placeholder="Zapodaj email"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
 				/>
-				<Form.Label column="lg">Dodaj kostium</Form.Label>
+				<Form.Label column="lg">Dodaj kostium (max 5)</Form.Label>
 				<Form.Control
+						disabled={loading}
 						type="text"
-						placeholder="Kostiumy"
+						placeholder="enter zeby potwierdzic"
 						onChange={handleChangeState}
 						onKeyDown={handleKeyDown}
 						value={inputValue}
@@ -67,8 +85,11 @@ function App() {
 				<Form.Label column="sm">{ costumes.join(', ') }</Form.Label>
 			</Form.Group>
 			<Button variant="primary"
-					type="submit">Wyślij</Button>
-			<Button variant="secondary" onClick={resetCostumes}>Resetuj</Button>
+					type="submit"
+					disabled={loading}>Wyślij</Button>
+			<Button variant="secondary"
+					onClick={resetCostumes}
+					disabled={loading}>Resetuj kostiumy</Button>
 		</Form>
     </div>
   );
