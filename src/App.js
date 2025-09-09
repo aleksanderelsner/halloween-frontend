@@ -39,12 +39,15 @@ function App() {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		setLoading(true);
 		if (usedEmails.includes(email)) {
 			alert("Gdzie sie kurwa pchasz drugi raz, jak zjebals to pisz do alka to ci pomoze");
-			setLoading(false);
 			return;
 		}
+		if (costumes.length === 0 ) {
+			alert("No kurwa wpisz cos w te kostiumy, nie pierdol sie");
+			return;
+		}
+		setLoading(true);
 		console.log("calling api");
 		const resp = await fetch(backendUrl + '/costumes', {
 			method: 'POST',
@@ -58,7 +61,7 @@ function App() {
 		setCostumes([]);
 		setEmail('');
 		setLoading(false);
-		alert("Dzięki za zgłoszenie" + email + ", wyslalos " + costumes.join(", "));
+		alert("Dzięki za zgłoszenie osobo pijacka: " + email + ", wyslalos " + costumes.join(", "));
 	}
 
   return (
