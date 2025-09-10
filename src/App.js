@@ -68,6 +68,15 @@ function App() {
     <div className="App">
 		<Form onSubmit={handleSubmit} className="Form">
 			<Form.Group className="mb-3" controlId="formBasicEmail">
+				<p>Czesc, aby wziac udzial w losowaniu na halloween podaj swoj mail</p>
+				<p>Za jakis czas dostaniesz na maila stroj ktory wylosowales</p>
+				<p>Widzimy sie 31 pazdziernika :)</p>
+				<p> </p>
+				<h4>ZEBY ZATWIERDZIC KOSTIUM WCISNIJ ENTER</h4>
+				<h6>pojawi sie on wtedy pod polem 'Dodaj kostium'</h6>
+				<h6>mozesz kliknac `resetuj kostiumy`</h6>
+				<h6>aby wyczyscic wprowadzone kostiumy</h6>
+				<h6>Nacisnij `wyslij` zeby dodac kostiumy do losowania</h6>
 				<Form.Label column="lg">Email</Form.Label>
 				<Form.Control
 						disabled={loading}
