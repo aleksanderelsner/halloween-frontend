@@ -47,6 +47,9 @@ function App() {
 			alert("No kurwa wpisz cos w te kostiumy, nie pierdol sie");
 			return;
 		}
+		if (costumes.length < 5 && inputValue !== '') {
+			costumes.push(inputValue);
+		}
 		setLoading(true);
 		console.log("calling api");
 		const resp = await fetch(backendUrl + '/costumes', {
